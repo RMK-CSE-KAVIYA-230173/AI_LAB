@@ -1,0 +1,41 @@
+from collections import defaultdict
+
+class Graph:
+    # Constructor
+    def __init__(self):
+        self.graph = defaultdict(list)  # Default dictionary to store graph
+
+    # Function to add an edge to the graph
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+
+    # Function to perform BFS traversal
+    def BFS(self, s):
+        visited = []  # List to track visited nodes
+        queue = []  # Queue for BFS
+        
+        # Mark the source node as visited and enqueue it
+        queue.append(s)
+        visited.append(s)
+
+        while queue:
+            s = queue.pop(0)  # Dequeue a vertex
+            print(s, end=" ")
+
+            # Process all adjacent nodes
+            for i in self.graph[s]:
+                if i not in visited:
+                    queue.append(i)
+                    visited.append(i)  # Mark as visited correctly
+
+# Driver code
+g = Graph()
+g.addEdge(0, 1)
+g.addEdge(0, 2)
+g.addEdge(1, 2)
+g.addEdge(2, 0)
+g.addEdge(2, 3)
+g.addEdge(3, 3)
+
+print("Following is Breadth-First Traversal (starting from vertex 2):")
+g.BFS(2)
