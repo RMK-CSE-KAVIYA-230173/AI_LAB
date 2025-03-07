@@ -1,0 +1,52 @@
+from collections import deque
+
+def Solution(a, b, target):
+    visited = set()
+    isSolvable = False
+    path = []
+
+    q = deque()
+    q.append((0, 0))  # Initial state (Both jugs empty)
+
+    while q:
+        # Current state
+        u = q.popleft()
+
+        # If this state is already visited, skip
+        if u in visited:
+            continue
+
+        # Mark as visited
+        visited.add(u)
+        path.append(u)
+
+        # If target is reached in either jug, print the path
+        if u[0] == target or u[1] == target:
+            isSolvable = True
+            for step in path:
+                print(f"({step[0]}, {step[1]})")
+            return  # Stop once the solution is found
+
+        # Generate next possible states:
+        q.append((a, u[1]))  # Fill Jug1
+        q.append((u[0], b))  # Fill Jug2
+        q.append((0, u[1]))  # Empty Jug1
+        q.append((u[0], 0))  # Empty Jug2
+
+        # Pour water from Jug1 -> Jug2
+        transfer = min(u[0], b - u[1])
+        q.append((u[0] - transfer, u[1] + transfer))
+
+        # Pour water from Jug2 -> Jug1
+        transfer = min(u[1], a - u[0])
+        q.append((u[0] + transfer, u[1] - transfer))
+
+    # If no solution found
+    if not isSolvable:
+        print("Solution not possible")
+
+# Driver Code
+if __name__ == '__main__':
+    Jug1, Jug2, target = 4, 3, 2
+    print("Path from initial state to solution state ::")
+    Solution(Jug1, Jug2, target)
