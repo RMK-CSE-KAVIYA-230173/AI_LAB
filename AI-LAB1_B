@@ -1,0 +1,48 @@
+print("Enter the number of queens")
+N = int(input())
+
+# Initialize chessboard with all elements set to 0
+board = [[0] * N for _ in range(N)]
+
+def is_safe(row, col):
+    """Check if placing a queen at (row, col) is safe."""
+    # Check the column
+    for i in range(row):
+        if board[i][col] == 1:
+            return False
+
+    # Check upper left diagonal
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+
+    # Check upper right diagonal
+    for i, j in zip(range(row, -1, -1), range(col, N)):
+        if board[i][j] == 1:
+            return False
+
+    return True
+
+def solve_n_queens(row):
+    """Recursive backtracking function to solve N-Queens."""
+    if row >= N:
+        return True  # All queens placed successfully
+
+    for col in range(N):
+        if is_safe(row, col):
+            board[row][col] = 1  # Place queen
+            
+            if solve_n_queens(row + 1):  # Recursively place next queen
+                return True
+
+            board[row][col] = 0  # Backtrack if placement doesn't work
+
+    return False  # No valid placement found
+
+# Check if a solution exists
+if solve_n_queens(0):
+    print("Solution exists. Placements of queens:")
+    for row in board:
+        print(row)
+else:
+    print("No solution exists.")
